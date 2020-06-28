@@ -22,7 +22,7 @@ plugins {
 }
 apply plugin: 'com.jfrog.bintray'
 
-group = "de.ffuf.kotlin.multiplatform.annotations"
+group = "org.brightify.fork.kotlin.multiplatform.annotations"
 version = "1.0.19"
 
 repositories {
