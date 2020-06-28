@@ -23,7 +23,7 @@ plugins {
 apply plugin: 'com.jfrog.bintray'
 
 group = "de.ffuf.kotlin.multiplatform.annotations"
-version = plugin_version
+version = 1.0.19
 
 repositories {
 
@@ -175,108 +175,3 @@ kotlin {
 
     }
 }
-
-build.finalizedBy(publishToMavenLocal)
-publishing {
-    publications {
-        kotlinMultiplatform {
-            artifactId = "annotations"
-            artifact(emptyJar)
-        }
-    }
-    repositories {
-        maven {
-            //url "${System.getProperty('user.home')}/.m2/repository"
-            url 'https://api.bintray.com/maven/jonasbark/ffuf/kotlin-native-suspend-function-callback-annotations'
-            credentials {
-                username = bintray_user
-                password = bintray_api_key
-            }
-        }
-    }
-}
-
-/*def selectArtifactId(project, type, defaultName) {
-    def name = project.name
-
-    switch (type) {
-        case 'metadata':
-            return "$name"
-            break
-        case 'kotlinMultiplatform':
-            return "$name-native"
-            break
-        case 'jvm':
-            return "$name-jvm"
-            break
-        default:
-            return defaultName// : "$name"
-            break
-    }
-}
-
-publishing {
-    publications.all {
-        pom.withXml(configureMavenCentralMetadata)
-
-        def type = it.name
-        def id = selectArtifactId(project, type, it.artifactId)
-        it.artifactId = id
-        if (id.endsWith('native')) {
-            it.artifact stubJavadoc
-            it.artifact emptySourceJar
-            it.artifact emptyJar
-        }
-    }
-
-    kotlin.targets.all { target ->
-        def publication = publishing.publications.findByName(target.name)
-
-        if (publication != null) {
-            publication.artifact stubJavadoc
-
-            if (target.platformType.name != 'native') {
-                publication.moduleDescriptorGenerator = null
-            } else {
-                publication.artifact emptyJar
-            }
-        }
-    }
-
-    // Disable gradle metadata in root jvm modules
-    def hasNative = project.ext.has("hasNative") && project.ext.hasNative
-    if (!hasNative) {
-        def rootPublication = publishing.publications.findByName('kotlinMultiplatform')
-        rootPublication.moduleDescriptorGenerator = null
-    }
-}*/
-
-/*bintray {
-    user = bintray_user
-    key = bintray_api_key
-    pkg {
-        repo = "ffuf"
-        name = "kotlin-native-suspend-function-callback-annotations"
-        licenses = ['Apache-2.0']
-        websiteUrl = "https://ffuf.de"
-        vcsUrl = 'https://github.com/feilfeilundfeil/kotlin-native-suspend-function-callback'
-        version {
-            name = project.version
-            desc = 'Initial bintray release'
-            released = new Date()
-        }
-
-    }
-}
-
-bintrayUpload.doFirst {
-    publications = []
-    def projectPublications = project.publishing.publications
-    for (publication in projectPublications) {
-        if (publication.artifactId.endsWith("-test")) {
-            continue
-        }
-        publications += publication.name
-    }
-}*/
-bintrayUpload.dependsOn(publishToMavenLocal)
